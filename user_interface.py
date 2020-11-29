@@ -26,7 +26,7 @@ def user_interface():
         num+=1
     print("**************************************")
 
-    #computes one-fold cross validation (un-comment to see)
+    #computes one-fold cross validation (un-comment to see), takes a while to compute but it works
     #print("The cross validation error of the training set is", cross_validation_error(unnormalized_data,song_scores))
 
 user_interface()

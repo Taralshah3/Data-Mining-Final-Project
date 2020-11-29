@@ -106,7 +106,7 @@ def assign_scores(filename, weights, unnormalized_data):
 
     return ten_predictions, ten_urls #return reccomendations array from highest --> lowest
 
-def cross_validation_error(data, actualSleep):
+def cross_validation_error(data, actual_songs):
     errArr = np.array([])
     for i in range(0,len(data)):
         test_set = data[i,:]
@@ -117,9 +117,9 @@ def cross_validation_error(data, actualSleep):
 
         training_set = normalize_data_points(training_set,training_set)
 
-        weights = batch_gradient_descent(training_set,actualSleep)
+        weights = batch_gradient_descent(training_set,actual_songs)
         estimation = weights[0] + weights[1]*test_set[0]+weights[2]*test_set[1] +weights[3]*test_set[2] + weights[4]*test_set[3] + weights[5]*test_set[4] +weights[6]*test_set[5]+weights[7]*test_set[6]
-        error = math.sqrt((estimation-actualSleep[i])**2)
+        error = math.sqrt((estimation-actual_songs[i])**2)
         errArr = np.append(error,errArr)
 
     return np.mean(errArr)
