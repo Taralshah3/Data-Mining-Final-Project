@@ -6,16 +6,18 @@ import pandas as pd
 learningRate = 0.01
 plotArray = []
 
-def normalize_data_points(data_to_be_normalized, training_data):
-    num_rows,num_cols = data_to_be_normalized.shape
+def normalize_data_points(data_points, training_points):
+    data_points_rows, data_points_cols = data_points.shape
+    output = np.zeros(shape=data_points.shape)
 
-    for i in range(0,num_cols):
-        current_mean_column = np.mean(training_data[:,i])
-        current_sd_column = np.std(training_data[:,i], ddof = 1)
-        for b in range(0,num_rows):
-            data_to_be_normalized[b,i] = (data_to_be_normalized[b,i]-current_mean_column)/current_sd_column
+    for i in range(data_points_cols):
+        cur_feature = training_points[:,i]
+        max = np.max(cur_feature)
+        min = np.min(cur_feature)
+        for j in range(data_points_rows):
+            output[j][i] = (data_points[j][i] - min) / (max-min)
     
-    return data_to_be_normalized
+    return output
 
 def load_data(song_data):
      data = song_data
@@ -94,8 +96,8 @@ def assign_scores(filename, weights, unnormalized_data):
     
     data = np.concatenate((data,urls.reshape(-1,1)), axis = 1) 
     sorted_data = data[np.argsort(data[:,num_cols])]  #sorts the array by predictions
-   
-    num_rows, num_cols = data.shape
+
+    num_rows, num_cols = sorted_data.shape
     ten_predictions = np.array([]) #stores ten reccomendations for songs by name
     ten_urls = np.array([]) 
     for i in range(0,10):
