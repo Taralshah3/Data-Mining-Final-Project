@@ -6,7 +6,6 @@ import pandas as pd
 learningRate = 0.01
 plotArray = []
 
-#double check that this is working properly
 def normalize_data_points(data_to_be_normalized, training_data):
     num_rows,num_cols = data_to_be_normalized.shape
 
@@ -29,22 +28,16 @@ def load_data(song_data):
      data = np.delete(data,0,axis = 1)
     
      #gets song scores 
-     #may need to change 7 depending on if we add/remove columns
      song_scores = data[:,7]
 
      #removes how much we like the song
-     #may need to change the 7 depending on if we add more columns or not
-
      data = np.delete(data,7,axis = 1)
 
      normalized_data = normalize_data_points(data,data)
      return normalized_data,song_scores,data
-     #print(batch_gradient_descent(normalized_data,song_scores))
-     #print(normalized_data)
 
 
 def batch_gradient_descent(data, song_scores):
-    #need to alter weights to be 8
     weights = [0,0,0,0,0,0,0,0]
     numberExamples = len(data)
 
@@ -101,4 +94,22 @@ def assign_scores(filename, weights, unnormalized_data):
     for i in range(0,10):
         ten_predictions = np.append(ten_predictions,sorted_data[num_rows-1-i,0]) #did this because np.sort sorts by lowest --> highest
 
-    return ten_predictions #prints reccomendations highest --> lowest
+    return ten_predictions #return reccomendations array from highest --> lowest
+
+def cross_validation_error(data, actualSleep):
+    errArr = np.array([])
+    for i in range(0,len(data)):
+        test_set = data[i,:]
+        training_set = np.delete(data, i, 0)
+
+        test_set = normalize_data_points(np.array([test_set]),training_set)
+        test_set = test_set[0]
+
+        training_set = normalize_data_points(training_set,training_set)
+
+        weights = batch_gradient_descent(training_set,actualSleep)
+        estimation = weights[0] + weights[1]*test_set[0]+weights[2]*test_set[1] +weights[3]*test_set[2] + weights[4]*test_set[3] + weights[5]*test_set[4] +weights[6]*test_set[5]+weights[7]*test_set[6]
+        error = math.sqrt((estimation-actualSleep[i])**2)
+        errArr = np.append(error,errArr)
+
+    return np.mean(errArr)

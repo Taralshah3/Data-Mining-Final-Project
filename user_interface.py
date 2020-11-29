@@ -18,10 +18,13 @@ def user_interface():
 
     #shows the user interface
     print("Hi! Your song reccomendations are:")
+    print("**************************************")
     num = 1
     for i in reccomendations:
         print(num, i)
         num+=1
-    
+    print("**************************************")
+
+    print("The cross validation error of the training set is", cross_validation_error(unnormalized_data,song_scores))
 
 user_interface()
