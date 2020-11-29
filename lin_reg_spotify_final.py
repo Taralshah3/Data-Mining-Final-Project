@@ -67,7 +67,11 @@ def assign_scores(filename, weights, unnormalized_data):
     df = pd.read_csv(filename) #pandas automatically removes headers
     data = df.to_numpy()
 
-    
+    #removes urls, might need to delete later 
+    urls = data[:,1]
+    #this line of code also deletes urls
+    data = np.delete(data,1,1)
+
     data = data[:,0:8] #removes NaN values at the end of the array
     
     song_names = data[:,0]
@@ -86,15 +90,19 @@ def assign_scores(filename, weights, unnormalized_data):
         predictions = np.append(predictions,estimation)
     
     predictions = predictions.reshape(-1,1) #changes predictions array to be vertical
-    data = np.concatenate((data,predictions), axis = 1) #adds the current data to the predictions 
+    data = np.concatenate((data,predictions), axis = 1) #adds the current data to the predictions
+    
+    data = np.concatenate((data,urls.reshape(-1,1)), axis = 1) 
     sorted_data = data[np.argsort(data[:,num_cols])]  #sorts the array by predictions
    
-    
-    ten_predictions = np.array([]) #stores ten reccomendations for songs by name 
+    num_rows, num_cols = data.shape
+    ten_predictions = np.array([]) #stores ten reccomendations for songs by name
+    ten_urls = np.array([]) 
     for i in range(0,10):
         ten_predictions = np.append(ten_predictions,sorted_data[num_rows-1-i,0]) #did this because np.sort sorts by lowest --> highest
+        ten_urls = np.append(ten_urls,sorted_data[num_rows-1-i,num_cols-1])
 
-    return ten_predictions #return reccomendations array from highest --> lowest
+    return ten_predictions, ten_urls #return reccomendations array from highest --> lowest
 
 def cross_validation_error(data, actualSleep):
     errArr = np.array([])

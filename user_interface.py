@@ -14,14 +14,15 @@ def user_interface():
     weights = batch_gradient_descent(formatted_data,song_scores)
 
     #gets the ten best reccomendations
-    reccomendations = assign_scores('SongData_large.csv',weights,unnormalized_data)
+    reccomendations, urls = assign_scores('SongData_large.csv',weights,unnormalized_data)
 
     #shows the user interface
     print("Hi! Your song reccomendations are:")
     print("**************************************")
     num = 1
-    for i in reccomendations:
-        print(num, i)
+    for i in range(0,len(reccomendations)):
+        print(num, reccomendations[i])
+        print("URL: ",urls[i])
         num+=1
     print("**************************************")
 
