@@ -103,6 +103,7 @@ def assign_scores(filename, weights, unnormalized_data):
     for i in range(0,10):
         ten_predictions = np.append(ten_predictions,sorted_data[num_rows-1-i,0]) #did this because np.sort sorts by lowest --> highest
         ten_urls = np.append(ten_urls,sorted_data[num_rows-1-i,num_cols-1])
+        print(sorted_data[num_rows-1-i,:])
 
     return ten_predictions, ten_urls #return reccomendations array from highest --> lowest
 
